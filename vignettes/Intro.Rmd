@@ -1,0 +1,66 @@
+---
+title: "Exploratory Data Analysis"
+output: html_document
+date: "2022-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installation
+
+```{r}
+library(gaitR)
+```
+
+# An Initial Analysis of the Gait Profiles
+
+## Extracting the Gait Profiles Data
+
+```{r}
+gp <- extract_gait_profiles()
+
+# number of unique subjects
+unique(gp$subject_num)
+
+```
+
+## Exploratory Data Analysis 
+
+### Plots of Select Gait Profile Samples
+
+```{r}
+sample_subjects <- c('02', '06', '10', '14')
+cycle_id <- c('10', '15', '20', '25', '30', '35', '40')
+plot_profile_samples(gp, sample_subjects, cycle_id)
+```
+
+### An Animated Plot of Subject 01's Gait Cycles
+
+```{r}
+plot_animated(gp, subject_id='01')
+```
+
+# Insights Gained from the First Quick Analysis
+
+- There is a large variability in the gait profiles within participants. 
+
+- Despite the above observation, the general shapes of the profiles across participants can be different.  
+
+- We can potentially capitalize on insights from **facial recognition**. Specifically, the face recognition literature divides problems into:  
+  * *Facial Detection:* For example, using [Google's ML Kit's face detection API](https://developers.google.com/ml-kit/vision/face-detection) ML practitioners can "detect faces in an image, identify key facial features, and get the contours of detected faces. Note that the API detects faces, it does not recognize people."  
+  * *Facial Recognition:* where the goal is to identify who the person in the picture is.  
+
+- The analogy for us would be that we would like to potentially **detect** (segment/extract) pure walking tasks from a long stream of accelerometer/IMU data, and then design/test methodologies that are best suited for **gait recognition** (whose gait is this)? Due to the somewhat large variability within participants, we will need to examine this question in a potentially repeated manner (using moving windows of different sizes) so that we can determine what is the smallest chunk of data that can be used to recognize a person based on their gait?  **Complicating factors:**
+  * Fatigue; people walk differently when they are fatigued.  
+  * The type of task (e.g., walking while pushing a cart, or walking while carrying an object) may change the gait profile.  
+  * The preprocessing performed on the sensor data (e.g., cutoffs used for filtering/smoothing the raw sensor data may play a role).  
+  * Etc.
+
+
+- Once we show that a person's gait can be considered like a bio-metric feature (which we will also need to see the authentication literature for support). The question would be how do we share a person's data without sharing their unique `fingerprint`. The spectrum of methodologies here are very wide. **Possible approaches:**
+  * Add noise to the profiles??
+  * Sharing just features extracted from a given person?? 
+  * Performing a cluster analysis and only share percentiles of the cluster data that are extrapolated (i.e., would grantee that they do not belong to an individual)??  
+  * Etc.

@@ -1,0 +1,17 @@
+exportPattern("^[[:alpha:]]+")
+
+import('tidyverse')
+import('reticulate')
+import('R.matlab')
+import('gganimate')
+import('gifski')
+import('stringr')
+import('purrr')
+import('dplyr')
+import('tibble')
+import('tidyr')
+import('ggplot2')
+
+
+
+
